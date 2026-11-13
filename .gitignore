@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+.venv/
+venv/
+env/
+
+.idea/
+.vscode/
+.DS_Store
+
+# 数据文件体积大，不入库；需要时用 git-lfs 或 release 附件分发
+基金数据分析/
+*.csv
+!tests/data/*.csv
+cache/
