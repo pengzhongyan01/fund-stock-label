@@ -187,8 +187,14 @@ if errorlevel 1 (
 
 git remote get-url origin >nul 2>&1
 if errorlevel 1 (
-    git remote add origin "!CLEAN!"
-    echo   已添加 origin：!CLEAN!
+    rem 远端可能已存在同名仓库（GitHub Desktop 建过了）—— add 失败就退而用 set-url
+    git remote add origin "!CLEAN!" 2>nul
+    if errorlevel 1 (
+        git remote set-url origin "!CLEAN!"
+        echo   已关联已存在的远程仓库：!CLEAN!
+    ) else (
+        echo   已添加 origin：!CLEAN!
+    )
 ) else (
     for /f "tokens=*" %%i in ('git remote get-url origin') do set "OLDURL=%%i"
     if "!OLDURL!"=="!CLEAN!" (
@@ -202,9 +208,55 @@ if errorlevel 1 (
 echo.
 
 git branch -M main
+
+rem --- 探测网络：git 直连或走代理 ---
+set "PROXY_ARG="
+echo   [i] 测试与 GitHub 的连接...
+git ls-remote --heads origin >nul 2>&1
+if errorlevel 1 (
+    echo   [i] 直连失败，尝试用环境变量里的代理...
+    if not "%HTTP_PROXY%"=="" set "PROXY_ARG=http.proxy=%HTTP_PROXY%"
+    if not "%HTTPS_PROXY%"=="" if "%HTTP_PROXY%"=="" set "PROXY_ARG=http.proxy=%HTTPS_PROXY%"
+    if not defined PROXY_ARG (
+        echo   [w] 没有可用的代理配置。请检查网络，或先执行：
+        echo        git config --global http.proxy http://127.0.0.1:端口
+        pause & popd & exit /b 1
+    )
+    git -c "!PROXY_ARG!" ls-remote --heads origin >nul 2>&1
+    if errorlevel 1 (
+        echo   [x] 连接 GitHub 失败。检查代理是否可用，或换个网络环境。
+        pause & popd & exit /b 1
+    )
+    echo   [OK] 通过代理连上了
+) else (
+    echo   [OK] 直连成功
+)
+
+rem --- 检查远端是否已有提交 ---
+rem 注意：PROXY_ARG 可能为空，此时不能用 git -c "!PROXY_ARG!"（会变成 git -c "" 导致命令出错）
+set "REMOTE_HEADS="
+if defined PROXY_ARG (
+    for /f "tokens=*" %%i in ('git -c "!PROXY_ARG!" ls-remote --heads origin 2^>nul') do set "REMOTE_HEADS=%%i"
+) else (
+    for /f "tokens=*" %%i in ('git ls-remote --heads origin 2^>nul') do set "REMOTE_HEADS=%%i"
+)
+if defined REMOTE_HEADS (
+    echo   [i] 远端已有分支，先拉取合并...
+    if defined PROXY_ARG (
+        git -c "!PROXY_ARG!" pull origin main --rebase
+    ) else (
+        git pull origin main --rebase
+    )
+)
+
+echo.
 echo   正在推送（首次会弹出 GitHub 登录窗口，点 Authorize git）...
 echo.
-git push -u origin main
+if defined PROXY_ARG (
+    git -c "!PROXY_ARG!" push -u origin main
+) else (
+    git push -u origin main
+)
 if errorlevel 1 (
     echo.
     echo [x] 推送失败。可能原因：
