@@ -191,8 +191,42 @@ def build_blocks() -> list[dict]:
         )
     )
 
+    blocks.append(
+        para(
+            "注：CI 的 Python 版本固定为 3.11 / 3.12 / 3.13 —— pandas 3.1 与 "
+            "akshare 1.20 起均要求 Python ≥ 3.11，3.10 已无法安装依赖。",
+            {"font_size": 10.5},
+        )
+    )
+
+    # ---------------- 交付物与截图 ----------------
+    blocks.append(para("四、交付物与截图说明", SUB_FONT, level=2))
+    blocks.append(
+        para(
+            "作业实体是「GitHub 仓库 + 本文档」；老师要的截图是证明代码能跑起来的证据。"
+        )
+    )
+
+    deliver_rows = [
+        ("交付物 1", "GitHub 仓库：fundlab/ 包、tests/ 测试、.github/workflows/ci.yml"),
+        ("交付物 2", "本 Word 文档：问题清单 20 条 + 修复后的完整代码"),
+        ("截图（必交）", "GitHub Actions 全绿 —— 仓库 Actions 标签页，所有 job 显示绿色对勾"),
+        ("截图（必交）", "Actions 里 pytest 的输出 —— 点进 test job 的「运行测试」步骤，截到 25 passed"),
+        ("截图（选交）", "本地运行成功的终端 —— 执行 bash scripts/verify_local.sh 后截整个窗口"),
+    ]
+    for name, desc in deliver_rows:
+        blocks.append(para(f"· {name}：{desc}", {"font_size": 10.5}))
+
+    blocks.append(
+        para(
+            "推送后如果 Actions 变红，多半是 Python 版本或目录结构问题，"
+            "排查步骤见仓库 docs/交付指南.md。",
+            {"font_size": 10.5},
+        )
+    )
+
     # ---------------- 验证结果 ----------------
-    blocks.append(para("四、验证结果", SUB_FONT, level=2))
+    blocks.append(para("五、验证结果", SUB_FONT, level=2))
     results = [
         "单元测试：25 passed（全部离线运行，不依赖外网和真实数据文件）",
         "全新 clone 环境验证：pip install + pytest + compileall + CLI 全部通过",

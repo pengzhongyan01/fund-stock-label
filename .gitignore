@@ -27,3 +27,6 @@ cache/
 trash_*.docx
 scratch*.docx
 var*.docx
+
+# 工作区元数据，不属于项目代码
+.workbuddy/

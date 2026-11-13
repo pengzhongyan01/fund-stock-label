@@ -95,13 +95,35 @@ python -m fundlab --data-root ./基金数据分析 \
 命名（年份和季度交叉）。本项目保留了这一行为（`--year-quarter-pairing crossed`），
 确认命名规则后可以改成 `straight` 让年份和季度对应上。
 
+## 交付与截图
+
+作业实体是 **GitHub 仓库 + Word 文档**；老师要的截图是"代码真的跑起来了"的**证据**。
+
+| 优先级 | 截图 | 从哪儿截 |
+| --- | --- | --- |
+| ⭐ 必交 | GitHub Actions 全绿 | 仓库 → Actions 标签页 |
+| ⭐ 必交 | Actions 里 pytest 的 `25 passed` | 点进 test job → "运行测试" step |
+| 🟡 加分 | 本地运行成功的终端 | `bash scripts/verify_local.sh` |
+
+生成一份可直接复制的验证报告：
+
+```bash
+python scripts/make_evidence.py     # 输出到 docs/验证报告.txt
+```
+
+完整步骤（含推送命令、截图要点、发给老师的话术）见
+[`docs/交付指南.md`](docs/交付指南.md)。
+
 ## GitHub Actions
 
 `.github/workflows/ci.yml` 会在 push / PR 时自动：
 
-1. 在 Python 3.10 / 3.11 / 3.12 上跑单元测试（全部离线，不访问外网）；
+1. 在 Python 3.11 / 3.12 / 3.13 上跑单元测试（全部离线，不访问外网）；
 2. 做编译检查；
 3. 跑一个使用内置样例数据的端到端冒烟测试。
+
+> ⚠️ Python 3.10 已从矩阵中移除：pandas ≥ 3.1 与 akshare ≥ 1.20 均要求
+> Python ≥ 3.11，3.10 无法安装依赖会让 job 变红。
 
 因为新浪接口会封 IP，CI 不直接抓真实行情；真实数据请在本地跑，或用
 [Actions 定时任务](https://docs.github.com/actions/using-workflows/events-that-trigger-workflows)
@@ -127,7 +149,13 @@ fundlab/
 └── cli.py         # 命令行入口
 docs/
 ├── 原始代码.py    # 作业原始代码存档
-└── 修复说明.md    # 逐条问题分析与修复对照
+├── 修复说明.md    # 逐条问题分析与修复对照
+├── 交付指南.md    # 推送步骤、截图清单、话术
+└── 验证报告.txt   # 自动生成的验证报告（可复制进实验报告）
+scripts/
+├── verify_local.sh   # 本地复现 CI 全流程，用于截图
+├── make_evidence.py  # 生成验证报告
+└── update_docx.py    # 把修复说明与修复后代码写回作业 Word 文档
 tests/
 ├── sample_data.py # 样例数据生成器
 └── test_pipeline.py
