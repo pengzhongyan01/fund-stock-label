@@ -22,3 +22,8 @@ env/
 *.csv
 !tests/data/*.csv
 cache/
+
+# 生成过程中的临时文件
+trash_*.docx
+scratch*.docx
+var*.docx
