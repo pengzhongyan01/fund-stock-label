@@ -62,6 +62,19 @@ def build_sample_data(root: Path, seed: int = 42) -> Path:
         encoding="utf-8-sig",
     )
 
+    # --- 连续二季度基金收益率前 200 名（可视化用）---
+    pd.DataFrame(
+        {
+            "基金名称": ["易方达蓝筹精选", "中欧医疗健康", "兴全合润", "景顺长城新兴成长", "富国天惠精选"],
+            f"{CURRENT_QUARTER}收益率": [0.32, 0.21, 0.18, 0.15, 0.11],
+            f"{PREVIOUS_QUARTER}收益率": [0.28, 0.24, 0.13, 0.17, 0.09],
+        }
+    ).to_csv(
+        processed / f"连续二季度基金收益率前200-{CURRENT_QUARTER}与{PREVIOUS_QUARTER}.csv",
+        index=False,
+        encoding="utf-8-sig",
+    )
+
     # --- 高收益率基金前十大持仓（两个季度各一份）---
     holdings = pd.DataFrame(
         {

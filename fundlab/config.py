@@ -121,6 +121,8 @@ class Config:
     # 标签计算参数
     label_lookback: int = 20
     adjust: str = "qfq"
+    # 可视化：收益率表取前 N 名（原始代码文件名写死"前200"，实际画的是全部行）
+    rate_return_top_n: int = 200
 
     # 抓取参数
     retries: int = 3
@@ -160,6 +162,19 @@ class Config:
             f"连续二季度股票持有的基金持有家数{self.position_area}"
             f"-{self.current_quarter}与{self.previous_quarter}.csv"
         )
+
+    def rate_return_file(self) -> Path:
+        """连续二季度基金收益率前 N 名（可视化用）。"""
+
+        return self.processed_dir / (
+            f"连续二季度基金收益率前{self.rate_return_top_n}{self.position_area}"
+            f"-{self.current_quarter}与{self.previous_quarter}.csv"
+        )
+
+    def output_dir(self) -> Path:
+        """可视化结果输出目录。"""
+
+        return self.data_root / "可视化结果"
 
     def merged_file(self) -> Path:
         """合并后的中间文件：股票对应的基金持有家数和总市值。"""

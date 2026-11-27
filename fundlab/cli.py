@@ -16,6 +16,7 @@ from pathlib import Path
 
 from .config import Config
 from .pipeline import get_stock_label, merge_position_and_market, run
+from .visualize import data_visual
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -58,6 +59,22 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="只做合并，不抓行情",
     )
+    parser.add_argument(
+        "--visualize",
+        action="store_true",
+        help="生成可视化图表（HTML）",
+    )
+    parser.add_argument(
+        "--no-browser",
+        action="store_true",
+        help="生成图表但不自动打开浏览器（服务器 / CI 环境用）",
+    )
+    parser.add_argument(
+        "--top-n",
+        type=int,
+        default=10,
+        help="收益率图与持有家数图取前 N 名，默认 10",
+    )
     parser.add_argument("--log-level", default="INFO", help="日志级别")
     return parser
 
@@ -95,6 +112,15 @@ def main(argv: list[str] | None = None) -> int:
             get_stock_label(config)
         else:
             run(config)
+
+        if args.visualize:
+            produced = data_visual(
+                config,
+                top_n=args.top_n,
+                open_browser=not args.no_browser,
+            )
+            for path in produced:
+                print(f"图表已生成：{path}")
     except FileNotFoundError as exc:
         logging.getLogger(__name__).error("%s", exc)
         return 2
