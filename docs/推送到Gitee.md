@@ -4,10 +4,10 @@
 
 | 项 | 状态 |
 | --- | --- |
-| Gitee 用户名 | `pengzhongyan`（SSH 认证已通过） |
+| Gitee 用户名 | `peng-zhongyan`（SSH 认证已通过） |
 | SSH 密钥 | `~/.ssh/id_ed25519_git` ✓ 已存在 |
 | 本地代码 | ✓ 32 个文件、8 次提交，工作区干净 |
-| Gitee 远程 | 已配置好（`git@gitee.com:pengzhongyan/fund-stock-label.git`） |
+| Gitee 远程 | 已配置好（`git@gitee.com:peng-zhongyan/fund-stock-label.git`） |
 | **Gitee 上的仓库** | ⚠️ **还没建 —— 需要你操作** |
 
 `git push` 只能推已有的仓库，不能凭空创建（这是 Gitee 和 GitHub 的区别，
@@ -22,8 +22,8 @@ GitHub 支持 push-to-create，Gitee 不支持）。
 | 字段 | 填什么 |
 | --- | --- |
 | 仓库名称 | `fund-stock-label` |
-| 路径 | `pengzhongyan`（一般自动带出） |
-| 归属 | `pengzhongyan` |
+| 路径 | `peng-zhongyan`（一般自动带出） |
+| 归属 | `peng-zhongyan` |
 | 仓库属性 | **私有**（作业建议）或 公开 |
 | 设置 | **不要勾选**「使用 Readme 文件初始化这个仓库」 |
 
@@ -55,7 +55,7 @@ scripts\推送Gitee.bat
 
 ## 第 3 步：确认
 
-浏览器打开 <https://gitee.com/pengzhongyan/fund-stock-label>
+浏览器打开 <https://gitee.com/peng-zhongyan/fund-stock-label>
 
 应该能看到：
 
@@ -77,7 +77,7 @@ README.md
 ```bash
 # 看本地配的地址
 git remote -v
-# 应该是 git@gitee.com:pengzhongyan/fund-stock-label.git
+# 应该是 git@gitee.com:peng-zhongyan/fund-stock-label.git
 ```
 
 或者直接命令行推：

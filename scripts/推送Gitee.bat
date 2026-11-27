@@ -11,7 +11,7 @@ rem ================================================================
 set "REPO_DIR=%~dp0.."
 pushd "%REPO_DIR%"
 
-set "GITEE_USER=pengzhongyan"
+set "GITEE_USER=peng-zhongyan"
 set "REPO_NAME=fund-stock-label"
 set "SSH_KEY=%USERPROFILE%\.ssh\id_ed25519_git"
 
